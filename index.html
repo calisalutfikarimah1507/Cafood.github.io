@@ -2,7 +2,6 @@
 <html lang="id">
 <head>
   <title>Cafood - Catering & Food Delivery</title>
-  <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
     body {
@@ -55,7 +54,6 @@
   </style>
 </head>
 <body>
-  <!-- Navbar -->
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow sticky-top">
     <div class="container">
       <a class="navbar-brand d-flex align-items-center" href="#">
@@ -79,8 +77,6 @@
       </div>
     </div>
   </nav>
-
-  <!-- Hero Section -->
   <header class="hero text-center">
     <div class="container">
       <h1 class="display-4 fw-bold">Selamat Datang di Cafood</h1>
@@ -88,15 +84,13 @@
       <a href="#menu" class="btn btn-warning btn-lg mt-3">Lihat Menu</a>
     </div>
   </header>
-
-  <!-- Menu Section -->
   <section id="menu" class="py-5">
     <div class="container">
       <h2 class="text-center mb-4">Menu Favorit</h2>
       <div class="row">
         <div class="col-md-4">
           <div class="card shadow-sm">
-            <img src="Geprek.jpg" class="card-img-top" alt="Menu 1">
+            <img src="Geprek.jpg" class="card-img-top img-fluid" alt="Menu 1">
             <div class="card-body text-center">
               <h5 class="card-title">Nasi Box Spesial</h5>
               <p class="card-text">Rp 25.000</p>
@@ -106,7 +100,7 @@
         </div>
         <div class="col-md-4">
           <div class="card shadow-sm">
-            <img src="Nabok.jpg" class="card-img-top" alt="Menu 2">
+            <img src="Nabok.jpg" class="card-img-top img-fluid" alt="Menu 2">
             <div class="card-body text-center">
               <h5 class="card-title">Ayam Geprek Crispy</h5>
               <p class="card-text">Rp 20.000</p>
@@ -116,7 +110,7 @@
         </div>
         <div class="col-md-4">
           <div class="card shadow-sm">
-            <img src="Salad.jpg" class="card-img-top" alt="Menu 3">
+            <img src="Salad.jpg" class="card-img-top img-fluid" alt="Menu 3">
             <div class="card-body text-center">
               <h5 class="card-title">Salad Buah Segar</h5>
               <p class="card-text">Rp 15.000</p>
@@ -124,18 +118,15 @@
             </div>
           </div>
         </div>
-      </div>s
+      </div>
+    </div>
   </section>
-
-  <!-- Tentang -->
   <section id="tentang" class="py-5 bg-light">
     <div class="container text-center">
       <h2 class="mb-4">Tentang Kami</h2>
       <p class="lead">Cafood adalah layanan catering dan food delivery yang menghadirkan makanan sehat, higienis, dan lezat langsung ke rumah Anda. Kami berkomitmen untuk memberikan pengalaman terbaik bagi pelanggan dengan harga terjangkau.</p>
     </div>
   </section>
-
-  <!-- Testimoni -->
   <section id="testimoni" class="py-5">
     <div class="container">
       <h2 class="text-center mb-4">Apa Kata Mereka</h2>
@@ -161,14 +152,12 @@
       </div>
     </div>
   </section>
-
-  <!-- Kontak -->
   <section id="kontak" class="py-5 bg-light">
     <div class="container">
       <h2 class="text-center mb-4">Hubungi Kami</h2>
       <div class="row justify-content-center">
         <div class="col-md-6">
-          <form>
+          <form id="contact-form">
             <div class="mb-3">
               <label for="nama" class="form-label">Nama</label>
               <input type="text" class="form-control" id="nama" placeholder="Masukkan nama Anda">
@@ -187,48 +176,79 @@
       </div>
     </div>
   </section>
-
-  <!-- Footer -->
   <footer class="text-white text-center py-3">
     <p class="mb-0">&copy; 2025 Cafood. Semua Hak Dilindungi.</p>
   </footer>
-
-  <!-- Cart Panel -->
   <div class="cart-panel" id="cart">
     <h4>Keranjang Belanja</h4>
     <ul id="cart-items" class="list-group mb-3"></ul>
     <h5>Total: Rp <span id="cart-total">0</span></h5>
-    <button class="btn btn-success w-100">Checkout</button>
+    <button class="btn btn-success w-100" onclick="checkout()">Checkout</button>
     <button class="btn btn-outline-secondary w-100 mt-2" onclick="toggleCart()">Tutup</button>
   </div>
-
-  <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script>
     let cart = [];
+
     function addToCart(name, price) {
       cart.push({name, price});
       updateCart();
     }
+
+    function removeFromCart(index) {
+      cart.splice(index, 1);
+      updateCart();
+    }
+
     function updateCart() {
       const cartItems = document.getElementById('cart-items');
       const cartTotal = document.getElementById('cart-total');
       const cartCount = document.getElementById('cart-count');
       cartItems.innerHTML = '';
       let total = 0;
+
       cart.forEach((item, index) => {
         total += item.price;
         let li = document.createElement('li');
         li.className = "list-group-item d-flex justify-content-between align-items-center";
-        li.innerHTML = `${item.name} <span>Rp ${item.price}</span>`;
+        li.innerHTML = `
+          ${item.name} <span>Rp ${item.price.toLocaleString()}</span>
+          <button class="btn btn-sm btn-danger ms-2" onclick="removeFromCart(${index})">x</button>
+        `;
         cartItems.appendChild(li);
       });
+
       cartTotal.innerText = total.toLocaleString();
       cartCount.innerText = cart.length;
     }
+
     function toggleCart() {
       document.getElementById('cart').classList.toggle('active');
     }
+
+    function checkout() {
+      if (cart.length === 0) {
+        alert("Keranjang masih kosong!");
+        return;
+      }
+
+      let konfirmasi = confirm("Apakah Anda yakin ingin melanjutkan ke checkout?");
+      if (konfirmasi) {
+        let pesan = "Halo Cafood, saya ingin memesan:\n";
+        cart.forEach(item => {
+          pesan += `- ${item.name} (Rp ${item.price.toLocaleString()})\n`;
+        });
+        pesan += `\nTotal: Rp ${cart.reduce((a,b)=>a+b.price,0).toLocaleString()}`;
+        window.open(`https://wa.me/6281234567890?text=${encodeURIComponent(pesan)}`, "_blank");
+      } else {
+        alert("Checkout dibatalkan.");
+      }
+    }
+    document.getElementById("contact-form").addEventListener("submit", function(e){
+      e.preventDefault();
+      alert("Pesan Anda berhasil dikirim!");
+      this.reset();
+    });
   </script>
 </body>
 </html>
